@@ -38,7 +38,9 @@ class Preferences(models.Model):
 
 
 class Apartment(models.Model):
-    surface = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(3)], default=0.00)
+    surface = models.DecimalField(
+        max_digits=5, decimal_places=2, validators=[MinValueValidator(3)], default=0.00
+    )
     price = models.DecimalField(
         max_digits=8, decimal_places=2, validators=[MinValueValidator(1000)]
     )
@@ -47,7 +49,7 @@ class Apartment(models.Model):
     )
     is_available = models.BooleanField(default=True)
     description = models.CharField(max_length=600)
-    is_furnished = models.BooleanField(default=False)
+    is_furnished = models.BooleanField(default=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
 
