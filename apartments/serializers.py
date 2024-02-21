@@ -8,9 +8,7 @@ class AddressInputSerializer(serializers.Serializer):
     street = serializers.CharField(max_length=120)
     city = serializers.CharField(max_length=64)
     province = serializers.CharField(max_length=64)
-    postal_code = serializers.CharField(
-        max_length=10, validators=[UniqueValidator(queryset=Address.objects.all())]
-    )
+    postal_code = serializers.CharField(max_length=10)
 
 
 class AddressOutputSerializer(serializers.ModelSerializer):
