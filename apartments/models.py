@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 
 
 class Address(models.Model):
-    country = models.CharField(max_length=64)
+    country = models.CharField(max_length=64, default="Poland")
     street = models.CharField(max_length=120)
     city = models.CharField(max_length=64)
     province = models.CharField(max_length=64)
-    postal_code = models.CharField(max_length=10, unique=True)
+    postal_code = models.CharField(max_length=10)
 
 
 class Apartment(models.Model):

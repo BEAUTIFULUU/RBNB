@@ -1,20 +1,22 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 from .models import Apartment, Address
+from .validators import validate_postal_code
 
 
 class AddressInputSerializer(serializers.Serializer):
+    country = serializers.CharField(max_length=64)
     street = serializers.CharField(max_length=120)
     city = serializers.CharField(max_length=64)
     province = serializers.CharField(max_length=64)
-    postal_code = serializers.CharField(max_length=10)
+    postal_code = serializers.CharField(
+        max_length=10, validators=[validate_postal_code]
+    )
 
 
 class AddressOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ["street", "city", "province", "postal_code"]
+        fields = ["country", "street", "city", "province", "postal_code"]
 
 
 class ApartmentInputSerializer(serializers.Serializer):
@@ -59,9 +61,3 @@ class ApartmentDetailOutputSerializer(serializers.ModelSerializer):
             "owner",
             "address",
         ]
-
-
-class UserOutputSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "email", "first_name", "last_name"]

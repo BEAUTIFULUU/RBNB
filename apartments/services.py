@@ -27,9 +27,11 @@ def create_apartment_with_address(data: dict[str, any], owner_id: int) -> Apartm
 def update_apartment_with_address(
     data: dict[str, any], apartment_obj: Apartment
 ) -> None:
-    address_data = data.pop("address")
+    if "address" in data:
+        address_data = data.pop("address")
+        update_address(apartment_obj.address, address_data)
+
     update_apartment(apartment_obj, data)
-    update_address(apartment_obj.address, address_data)
 
 
 def update_apartment(apartment_obj: Apartment, data: dict[str, any]) -> None:

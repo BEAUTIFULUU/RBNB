@@ -4,11 +4,9 @@ from .views import (
     ApartmentDetailView,
     ApartmentAdvertiseView,
     ApartmentAdvertiseDetailView,
-    UserDetailsView,
 )
 
 urlpatterns = [
-    path("me/", UserDetailsView.as_view(), name="get_user_details"),
     path("apartments/", ApartmentView.as_view(), name="get_apartments"),
     path(
         "apartments/<int:apartment_id>/",
