@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("country", models.CharField(max_length=64)),
+                ("country", models.CharField(max_length=64, default="Poland")),
                 ("street", models.CharField(max_length=120)),
                 ("city", models.CharField(max_length=64)),
                 ("province", models.CharField(max_length=64)),
@@ -47,50 +47,19 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                (
-                    "surface",
-                    models.DecimalField(
-                        decimal_places=2,
-                        default=Decimal("3.00"),
-                        max_digits=5,
-                        validators=[
-                            django.core.validators.MinValueValidator(Decimal("3"))
-                        ],
-                    ),
-                ),
-                (
-                    "price",
-                    models.DecimalField(
-                        decimal_places=2,
-                        max_digits=8,
-                        validators=[django.core.validators.MinValueValidator(1000)],
-                    ),
-                ),
-                (
-                    "deposit",
-                    models.DecimalField(
-                        decimal_places=2,
-                        max_digits=6,
-                        null=True,
-                        validators=[django.core.validators.MinValueValidator(50)],
-                    ),
-                ),
+                ("surface", models.DecimalField(decimal_places=2, default=Decimal("3.00"), max_digits=5, validators=[django.core.validators.MinValueValidator(3)])),
+                ("price", models.DecimalField(decimal_places=2, max_digits=8, validators=[django.core.validators.MinValueValidator(1000)])),
+                ("deposit", models.DecimalField(decimal_places=2, max_digits=6, null=True, validators=[django.core.validators.MinValueValidator(50)])),
                 ("is_available", models.BooleanField(default=True)),
                 ("description", models.CharField(max_length=600)),
                 ("is_furnished", models.BooleanField(default=True)),
                 (
                     "address",
-                    models.OneToOneField(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="apartments.address",
-                    ),
+                    models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to="apartments.Address"),
                 ),
                 (
                     "owner",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to=settings.AUTH_USER_MODEL,
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
                 ),
             ],
         ),
@@ -109,17 +78,11 @@ class Migration(migrations.Migration):
                 ("date_time", models.DateTimeField()),
                 (
                     "apartment",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="apartments.apartment",
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="apartments.Apartment"),
                 ),
                 (
                     "user",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to=settings.AUTH_USER_MODEL,
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
                 ),
             ],
         ),
