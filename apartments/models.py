@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class Address(models.Model):
-    country = models.CharField(max_length=64)
+    country = models.CharField(max_length=64, default="Poland")
     street = models.CharField(max_length=120)
     city = models.CharField(max_length=64)
     province = models.CharField(max_length=64)
