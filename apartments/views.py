@@ -1,35 +1,38 @@
 from typing import Type
 
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from rest_framework import status, generics, permissions
-from .models import Apartment
-from .serializers import (
+from rest_framework import status, generics
+from apartments.models import Apartment
+from apartments.serializers import (
     ApartmentOutputSerializer,
     ApartmentInputSerializer,
     ApartmentDetailOutputSerializer,
 )
-from .services import (
+from apartments.services import (
     list_apartments,
     get_apartment_details,
-    list_user_apartment_advertisements,
+    list_owner_apartments,
     create_apartment_with_address,
     update_apartment_with_address,
 )
 
 
 class ApartmentView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["price", "deposit", "is_available"]
+    filterset_fields = {
+        "price": ["gte", "lte"],
+        "surface": ["gte", "lte"],
+        "is_available": ["exact"],
+    }
     serializer_class = ApartmentOutputSerializer
 
-    def get_queryset(self) -> list[Apartment]:
+    def get_queryset(self) -> QuerySet[Apartment]:
         return list_apartments()
 
 
 class ApartmentDetailView(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = ApartmentDetailOutputSerializer
     lookup_field = "apartment_id"
 
@@ -38,8 +41,7 @@ class ApartmentDetailView(generics.RetrieveAPIView):
         return get_apartment_details(apartment_id)
 
 
-class ApartmentAdvertiseView(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+class ApartmentAdvertisementView(generics.ListCreateAPIView):
 
     def get_serializer_class(
         self,
@@ -50,22 +52,21 @@ class ApartmentAdvertiseView(generics.ListCreateAPIView):
             else ApartmentInputSerializer
         )
 
-    def get_queryset(self) -> list[Apartment]:
-        return list_user_apartment_advertisements(self.request.user.id)
+    def get_queryset(self) -> QuerySet[Apartment]:
+        return list_owner_apartments(owner=self.request.user.id)
 
     def create(self, request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         apartment_obj = create_apartment_with_address(
-            data=serializer.validated_data, owner_id=self.request.user.id
+            data=serializer.validated_data, owner=self.request.user.id
         )
         output_serializer = ApartmentDetailOutputSerializer(apartment_obj)
         return Response(output_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ApartmentAdvertiseDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    lookup_field = "apartment_id"
+class ApartmentAdvertisementDetailView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = "advertisement_id"
 
     def get_serializer_class(
         self,
@@ -77,7 +78,7 @@ class ApartmentAdvertiseDetailView(generics.RetrieveUpdateDestroyAPIView):
         )
 
     def get_object(self) -> Apartment:
-        apartment_id = self.kwargs["apartment_id"]
+        apartment_id = self.kwargs["advertisement_id"]
         return get_apartment_details(apartment_id=apartment_id)
 
     def update(self, request, *args, **kwargs) -> Response:
