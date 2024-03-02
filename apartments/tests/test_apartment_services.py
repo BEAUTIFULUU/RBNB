@@ -111,7 +111,9 @@ class TestApartmentServices:
         owner_apartments = Apartment.objects.filter(owner_id=user.id)
         assert created_apartment in owner_apartments
 
-    def test_update_address_update_address_obj_if_data_is_valid(self, create_address_obj):
+    def test_update_address_update_address_obj_if_data_is_valid(
+        self, create_address_obj
+    ):
         address_obj = create_address_obj
         data = {
             "street": "new_street",
@@ -128,7 +130,9 @@ class TestApartmentServices:
         assert updated_address.postal_code == data["postal_code"]
         assert updated_address.country == data["country"]
 
-    def test_update_apartment_update_apartment_obj_if_data_is_valid(self, create_apartment_obj):
+    def test_update_apartment_update_apartment_obj_if_data_is_valid(
+        self, create_apartment_obj
+    ):
         apartment_obj = create_apartment_obj
         data = {
             "surface": "150.00",
@@ -145,7 +149,9 @@ class TestApartmentServices:
         assert updated_apartment.deposit == Decimal("2000.00")
         assert updated_apartment.is_available is True
 
-    def test_update_apartment_with_address_update_apartment_if_data_is_valid(self, create_apartment_obj):
+    def test_update_apartment_with_address_update_apartment_if_data_is_valid(
+        self, create_apartment_obj
+    ):
         apartment_obj = create_apartment_obj
         data = {
             "surface": "150.00",
