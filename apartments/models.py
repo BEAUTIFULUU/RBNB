@@ -1,10 +1,11 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
+from apartments.choices import COUNTRY_CHOICES, CURRENCY_CHOICES
 
 
 class Address(models.Model):
-    country = models.CharField(max_length=64, default="Poland")
+    country = models.CharField(choices=COUNTRY_CHOICES)
     street = models.CharField(max_length=120)
     city = models.CharField(max_length=64)
     province = models.CharField(max_length=64)
@@ -13,11 +14,12 @@ class Address(models.Model):
 
 class Apartment(models.Model):
     surface = models.DecimalField(
-        max_digits=5, decimal_places=2, validators=[MinValueValidator(3)], default=3
+        max_digits=5, decimal_places=2, validators=[MinValueValidator(3)]
     )
     price = models.DecimalField(
         max_digits=8, decimal_places=2, validators=[MinValueValidator(1000)]
     )
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES)
     deposit = models.DecimalField(
         max_digits=6, decimal_places=2, validators=[MinValueValidator(50)], null=True
     )
