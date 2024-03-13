@@ -22,13 +22,13 @@ from apartments.services import (
 
 
 class ApartmentView(generics.ListAPIView):
+    serializer_class = ApartmentOutputSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {
         "price": ["gte", "lte"],
         "surface": ["gte", "lte"],
         "is_available": ["exact"],
     }
-    serializer_class = ApartmentOutputSerializer
 
     def get_queryset(self) -> QuerySet[Apartment]:
         return list_apartments()

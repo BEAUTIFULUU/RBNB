@@ -3,7 +3,7 @@ from images.models import ApartmentImage
 from images.services import get_image_resolution
 
 
-class ImageOutputSerializer(serializers.ModelSerializer):
+class ApartmentImageOutputSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
 
     class Meta:
@@ -17,7 +17,7 @@ class ImageOutputSerializer(serializers.ModelSerializer):
         return None
 
 
-class ImageOutputSimpleSerializer(serializers.ModelSerializer):
+class ApartmentImageOutputSimpleSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
 
     class Meta:
@@ -31,7 +31,7 @@ class ImageOutputSimpleSerializer(serializers.ModelSerializer):
         return None
 
 
-class ImageDetailOutputSerializer(serializers.ModelSerializer):
+class ApartmentImageDetailOutputSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     resolution = serializers.SerializerMethodField()
 
@@ -48,5 +48,11 @@ class ImageDetailOutputSerializer(serializers.ModelSerializer):
         return get_image_resolution(image=obj)
 
 
-class ImageDetailInputSerializer(serializers.Serializer):
+class ApartmentImageDetailInputSerializer(serializers.Serializer):
     is_main = serializers.BooleanField(default=False)
+
+
+class ApartmentImageUploadSerializer(serializers.Serializer):
+    images = serializers.ListField(
+        child=serializers.ImageField()
+    )

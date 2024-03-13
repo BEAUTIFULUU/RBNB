@@ -6,11 +6,12 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework import status, generics
 from images.services import create_image_obj, get_image_details, update_image_obj
 from images.models import ApartmentImage
-from images.serializers import ImageDetailOutputSerializer, ImageDetailInputSerializer
+from images.serializers import ApartmentImageDetailOutputSerializer, ApartmentImageDetailInputSerializer, ApartmentImageUploadSerializer
 from images.permissions import IsOwnerOrForbidden
 
 
 class AdvertisementImageView(generics.CreateAPIView):
+    serializer_class = ApartmentImageUploadSerializer
     permission_classes = [IsOwnerOrForbidden]
     parser_classes = [MultiPartParser]
     lookup_field = "advertisement_id"
@@ -29,11 +30,11 @@ class AdvertisementImageDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_serializer_class(
         self,
-    ) -> Type[ImageDetailOutputSerializer | ImageDetailInputSerializer]:
+    ) -> Type[ApartmentImageDetailOutputSerializer | ApartmentImageDetailInputSerializer]:
         return (
-            ImageDetailOutputSerializer
+            ApartmentImageDetailOutputSerializer
             if self.request.method == "GET"
-            else ImageDetailInputSerializer
+            else ApartmentImageDetailInputSerializer
         )
 
     def get_object(self) -> ApartmentImage:
@@ -49,5 +50,5 @@ class AdvertisementImageDetailView(generics.RetrieveUpdateDestroyAPIView):
         update_image_obj(
             image_obj=image_obj, apartment_id=self.kwargs["advertisement_id"]
         )
-        output_serializer = ImageDetailOutputSerializer(image_obj)
+        output_serializer = ApartmentImageDetailOutputSerializer(image_obj)
         return Response(output_serializer.data, status=status.HTTP_200_OK)
