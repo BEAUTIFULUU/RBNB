@@ -53,6 +53,4 @@ class ApartmentImageDetailInputSerializer(serializers.Serializer):
 
 
 class ApartmentImageUploadSerializer(serializers.Serializer):
-    images = serializers.ListField(
-        child=serializers.ImageField()
-    )
+    images = serializers.ListField(child=serializers.ImageField())

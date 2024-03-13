@@ -60,7 +60,9 @@ class ApartmentOutputSerializer(serializers.ModelSerializer):
 
 class ApartmentDetailOutputSerializer(serializers.ModelSerializer):
     address = AddressOutputSerializer()
-    images = ApartmentImageOutputSimpleSerializer(many=True, source="apartmentimage_set", read_only=True)
+    images = ApartmentImageOutputSimpleSerializer(
+        many=True, source="apartmentimage_set", read_only=True
+    )
 
     class Meta:
         model = Apartment

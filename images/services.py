@@ -46,7 +46,9 @@ def create_image_obj(
 
 
 def get_image_details(apartment_id: int, image_id: uuid.UUID) -> ApartmentImage:
-    image_obj = ApartmentImage.objects.filter(id=image_id, apartment_id=apartment_id)
+    image_obj = ApartmentImage.objects.filter(
+        id=image_id, apartment_id=apartment_id
+    ).select_related("apartment")
     return get_object_or_404(image_obj)
 
 
@@ -58,7 +60,9 @@ def delete_image_obj(image_id: uuid.UUID, apartment_id: int) -> None:
 
 
 def _get_main_image(apartment_id: int) -> QuerySet[ApartmentImage]:
-    return ApartmentImage.objects.filter(apartment_id=apartment_id, is_main=True)
+    return ApartmentImage.objects.filter(
+        apartment_id=apartment_id, is_main=True
+    ).select_related("apartment")
 
 
 def update_image_obj(image_obj: ApartmentImage, apartment_id: int) -> None:

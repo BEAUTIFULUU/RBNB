@@ -6,7 +6,11 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework import status, generics
 from images.services import create_image_obj, get_image_details, update_image_obj
 from images.models import ApartmentImage
-from images.serializers import ApartmentImageDetailOutputSerializer, ApartmentImageDetailInputSerializer, ApartmentImageUploadSerializer
+from images.serializers import (
+    ApartmentImageDetailOutputSerializer,
+    ApartmentImageDetailInputSerializer,
+    ApartmentImageUploadSerializer,
+)
 from images.permissions import IsOwnerOrForbidden
 
 
@@ -30,7 +34,9 @@ class AdvertisementImageDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_serializer_class(
         self,
-    ) -> Type[ApartmentImageDetailOutputSerializer | ApartmentImageDetailInputSerializer]:
+    ) -> Type[
+        ApartmentImageDetailOutputSerializer | ApartmentImageDetailInputSerializer
+    ]:
         return (
             ApartmentImageDetailOutputSerializer
             if self.request.method == "GET"
