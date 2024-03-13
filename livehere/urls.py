@@ -15,11 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+
+from livehere import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api_urls")),
     path("__debug__/", include("debug_toolbar.urls")),
-]
+] + static("/api/media/", document_root=settings.MEDIA_ROOT)
