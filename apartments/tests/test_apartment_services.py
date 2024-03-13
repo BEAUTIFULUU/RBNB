@@ -9,9 +9,9 @@ from apartments.services import (
     list_apartments,
     get_apartment_details,
     list_owner_apartments,
-    create_apartment_with_address,
+    create_apartment,
     _update_apartment_data,
-    update_apartment_with_address,
+    update_apartment,
 )
 
 User = get_user_model()
@@ -97,7 +97,7 @@ class TestApartmentServices:
             },
         }
         assert Apartment.objects.count() == 0
-        created_apartment = create_apartment_with_address(data=data, owner=user.id)
+        created_apartment = create_apartment(data=data, owner=user.id)
         assert Apartment.objects.count() == 1
         owner_apartments = Apartment.objects.filter(owner_id=user.id)
         assert created_apartment in owner_apartments
@@ -141,7 +141,7 @@ class TestApartmentServices:
                 "postal_code": "55-555",
             },
         }
-        update_apartment_with_address(data=data, apartment_obj=apartment)
+        update_apartment(data=data, apartment_obj=apartment)
         updated_apartment_data = Apartment.objects.values().get(id=apartment.id)
         updated_apartment_data.pop("address_id", None)
         updated_apartment_data.pop("id")

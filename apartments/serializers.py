@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from apartments.choices import CURRENCY_CHOICES, COUNTRY_CHOICES
 from apartments.models import Apartment, Address
+from apartments.services import get_main_image_url
+from images.serializers import ImageOutputSimpleSerializer
 
 
 class AddressInputSerializer(serializers.Serializer):
@@ -37,6 +39,7 @@ class ApartmentInputSerializer(serializers.Serializer):
 
 class ApartmentOutputSerializer(serializers.ModelSerializer):
     address = AddressSimpleOutputSerializer()
+    main_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Apartment
@@ -45,13 +48,19 @@ class ApartmentOutputSerializer(serializers.ModelSerializer):
             "surface",
             "is_furnished",
             "price",
+            "currency",
+            "main_image",
             "is_available",
             "address",
         ]
 
+    def get_main_image(self, obj):
+        return get_main_image_url(apartment_id=obj.id)
+
 
 class ApartmentDetailOutputSerializer(serializers.ModelSerializer):
     address = AddressOutputSerializer()
+    images = ImageOutputSimpleSerializer(many=True, source="image_set", read_only=True)
 
     class Meta:
         model = Apartment
@@ -60,9 +69,11 @@ class ApartmentDetailOutputSerializer(serializers.ModelSerializer):
             "surface",
             "is_furnished",
             "price",
+            "currency",
             "deposit",
             "is_available",
             "description",
+            "images",
             "owner",
             "address",
         ]

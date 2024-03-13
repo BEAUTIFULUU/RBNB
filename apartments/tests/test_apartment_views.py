@@ -56,9 +56,7 @@ class TestApartmentViewResponses:
         response = client.get(reverse(url))
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-    def test_apartment_view_return_200_for_authenticated_user(
-            self, api_client
-    ):
+    def test_apartment_view_return_200_for_authenticated_user(self, api_client):
         url = "get_apartments"
         response = api_client.get(reverse(url))
 
@@ -67,9 +65,7 @@ class TestApartmentViewResponses:
 
 @pytest.mark.django_db
 class TestApartmentDetailViewResponses:
-    def test_apartment_detail_view_return_403_for_anonymous_user(
-            self, apartment
-    ):
+    def test_apartment_detail_view_return_403_for_anonymous_user(self, apartment):
         client = APIClient()
         url = "get_apartment_details"
         response = client.get(reverse(url, kwargs={"apartment_id": apartment.id}))
@@ -77,7 +73,7 @@ class TestApartmentDetailViewResponses:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_apartment_detail_view_return_200_for_authenticated_user(
-            self, api_client, apartment
+        self, api_client, apartment
     ):
         url = "get_apartment_details"
         response = api_client.get(reverse(url, kwargs={"apartment_id": apartment.id}))
@@ -96,16 +92,14 @@ class TestApartmentAdvertisementViewResponses:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_apartment_advertisement_view_return_200_for_authenticated_user(
-            self, api_client
+        self, api_client
     ):
         url = "get_owner_advertisements"
         response = api_client.get(reverse(url))
 
         assert response.status_code == status.HTTP_200_OK
 
-    def test_apartment_view_return_201_if_apartment_created(
-            self, api_client
-    ):
+    def test_apartment_view_return_201_if_apartment_created(self, api_client):
         url = "get_owner_advertisements"
         data = {
             "surface": "100.00",
@@ -129,9 +123,7 @@ class TestApartmentAdvertisementViewResponses:
 
 @pytest.mark.django_db
 class TestApartmentAdvertisementDetailViewResponses:
-    def test_apartment_detail_view_return_403_for_anonymous_user(
-            self, apartment
-    ):
+    def test_apartment_detail_view_return_403_for_anonymous_user(self, apartment):
         client = APIClient()
         url = "get_owner_advertisement_details"
         response = client.get(reverse(url, kwargs={"advertisement_id": apartment.id}))
@@ -139,15 +131,17 @@ class TestApartmentAdvertisementDetailViewResponses:
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_apartment_detail_view_return_200_for_authenticated_user(
-            self, apartment, api_client
+        self, apartment, api_client
     ):
         url = "get_owner_advertisement_details"
-        response = api_client.get(reverse(url, kwargs={"advertisement_id": apartment.id}))
+        response = api_client.get(
+            reverse(url, kwargs={"advertisement_id": apartment.id})
+        )
         assert response.status_code == status.HTTP_200_OK
         assert response.data["id"] == apartment.id
 
     def test_apartment_detail_view_return_200_if_apartment_updated_with_put_method(
-            self, apartment, api_client
+        self, apartment, api_client
     ):
         url = "get_owner_advertisement_details"
         data = {
@@ -174,7 +168,7 @@ class TestApartmentAdvertisementDetailViewResponses:
         assert response.status_code == status.HTTP_200_OK
 
     def test_apartment_detail_view_return_200_if_apartment_updated_with_patch_method(
-            self, apartment, api_client
+        self, apartment, api_client
     ):
         url = "get_owner_advertisement_details"
         data = {"deposit": "600", "address": {"street": "streettoo"}}
@@ -187,9 +181,11 @@ class TestApartmentAdvertisementDetailViewResponses:
         assert result.status_code == status.HTTP_200_OK
 
     def test_apartment_detail_view_return_204_if_apartment_deleted(
-            self, apartment, api_client
+        self, apartment, api_client
     ):
         url = "get_owner_advertisement_details"
-        result = api_client.delete(reverse(url, kwargs={"advertisement_id": apartment.id}))
+        result = api_client.delete(
+            reverse(url, kwargs={"advertisement_id": apartment.id})
+        )
 
         assert result.status_code == status.HTTP_204_NO_CONTENT
