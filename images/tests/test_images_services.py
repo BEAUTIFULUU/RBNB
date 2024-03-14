@@ -118,9 +118,7 @@ class TestImagesServices:
         assert main_image.is_main is True
         assert main_image == db_image_main
 
-    def test_update_apartment_image_obj_set_(
-        self, db_image_main, db_image
-    ):
+    def test_update_apartment_image_obj_set_(self, db_image_main, db_image):
         update_apartment_image_obj(
             image_obj=db_image, apartment_id=db_image.apartment_id
         )
