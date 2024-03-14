@@ -73,7 +73,7 @@ class TestApartmentServices:
     def test_list_owner_apartment_advertisements_return_user_apartments_if_apartments_exists(
         self, apartment
     ):
-        apartments_adv = list_owner_apartments(owner=apartment.owner_id)
+        apartments_adv = list_owner_apartments(owner_id=apartment.owner_id)
 
         assert len(apartments_adv) == 1
         assert apartment in apartments_adv

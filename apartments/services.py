@@ -14,12 +14,14 @@ def get_apartment_details(apartment_id: int) -> Apartment:
 
 
 def get_apartment_advertisement_details(apartment_id: int, owner_id: int) -> Apartment:
-    apartment_obj = Apartment.objects.filter(id=apartment_id, owner_id=owner_id)
+    apartment_obj = Apartment.objects.filter(
+        id=apartment_id, owner_id=owner_id
+    ).select_related("address")
     return get_object_or_404(apartment_obj)
 
 
-def list_owner_apartments(owner: int) -> QuerySet[Apartment]:
-    return Apartment.objects.filter(owner_id=owner).select_related("address")
+def list_owner_apartments(owner_id: int) -> QuerySet[Apartment]:
+    return Apartment.objects.filter(owner_id=owner_id).select_related("address")
 
 
 def create_apartment(data: dict[str, any], owner: int) -> Apartment:

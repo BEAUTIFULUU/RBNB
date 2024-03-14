@@ -22,13 +22,13 @@ from apartments.services import (
 
 
 class ApartmentView(generics.ListAPIView):
+    serializer_class = ApartmentOutputSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = {
         "price": ["gte", "lte"],
         "surface": ["gte", "lte"],
         "is_available": ["exact"],
     }
-    serializer_class = ApartmentOutputSerializer
 
     def get_queryset(self) -> QuerySet[Apartment]:
         return list_apartments()
@@ -46,15 +46,15 @@ class ApartmentDetailView(generics.RetrieveAPIView):
 class ApartmentAdvertisementView(generics.ListCreateAPIView):
     def get_serializer_class(
         self,
-    ) -> Type[ApartmentDetailOutputSerializer | ApartmentInputSerializer]:
+    ) -> Type[ApartmentOutputSerializer | ApartmentInputSerializer]:
         return (
-            ApartmentDetailOutputSerializer
+            ApartmentOutputSerializer
             if self.request.method == "GET"
             else ApartmentInputSerializer
         )
 
     def get_queryset(self) -> QuerySet[Apartment]:
-        return list_owner_apartments(owner=self.request.user.id)
+        return list_owner_apartments(owner_id=self.request.user.id)
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         serializer = self.get_serializer(data=request.data)
