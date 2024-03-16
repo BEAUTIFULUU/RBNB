@@ -16,13 +16,13 @@ User = get_user_model()
 
 
 @pytest.fixture
-def user():
+def user() -> User:
     user = User.objects.create(username="testuser123", password="testpassword123")
     return user
 
 
 @pytest.fixture
-def address():
+def address() -> Address:
     address_obj = Address.objects.create(
         street="teststreet",
         city="testcity",
@@ -34,7 +34,7 @@ def address():
 
 
 @pytest.fixture
-def apartment(address, user):
+def apartment(address: Address, user: User):
     apartment_obj = Apartment.objects.create(
         surface="100",
         is_furnished=True,
@@ -50,7 +50,7 @@ def apartment(address, user):
 
 
 @pytest.fixture
-def db_image(apartment):
+def db_image(apartment: Apartment):
     test_image_path = os.path.join(
         os.path.dirname(__file__), "test_data", "valid_image.jpg"
     )
@@ -61,7 +61,7 @@ def db_image(apartment):
 
 
 @pytest.fixture
-def db_image_main(apartment):
+def db_image_main(apartment: Apartment):
     test_image_path = os.path.join(
         os.path.dirname(__file__), "test_data", "valid_image.jpg"
     )
@@ -84,8 +84,8 @@ def in_memory_image(request):
 @pytest.mark.django_db
 class TestImagesServices:
     @pytest.mark.parametrize("in_memory_image", ["valid_image.jpg"], indirect=True)
-    def test_create_image_obj_creates_image_if_image_is_valid(
-        self, in_memory_image, apartment
+    def test_create_image_obj_create_image_if_image_is_valid(
+        self, in_memory_image: SimpleUploadedFile, apartment: Apartment
     ):
         assert ApartmentImage.objects.count() == 0
         created_apartment_image = create_apartment_image_obj(
@@ -94,7 +94,9 @@ class TestImagesServices:
         assert ApartmentImage.objects.count() == 1
         os.remove(f"images/{created_apartment_image.image.name}")
 
-    def test_get_image_details_return_apartment_image_obj(self, db_image):
+    def test_get_image_details_return_apartment_image_obj(
+        self, db_image: ApartmentImage
+    ):
         apartment_image_obj = get_apartment_image_details(
             image_id=db_image.id, apartment_id=db_image.apartment_id
         )
@@ -102,15 +104,15 @@ class TestImagesServices:
         assert apartment_image_obj.id == db_image.id
         assert apartment_image_obj.apartment_id == db_image.apartment_id
 
-    def test_delete_apartment_image_obj_deletes_obj(self, db_image):
+    def test_delete_apartment_image_obj_delete_obj(self, db_image: ApartmentImage):
         assert ApartmentImage.objects.count() == 1
         delete_apartment_image_obj(
             image_id=db_image.id, apartment_id=db_image.apartment_id
         )
         assert ApartmentImage.objects.count() == 0
 
-    def test_get_main_image_return_apartment_image_with_is_main_true(
-        self, db_image, db_image_main
+    def test_get_main_image_return_main_apartment_image(
+        self, db_image: ApartmentImage, db_image_main: ApartmentImage
     ):
         main_image_queryset = _get_main_image(apartment_id=db_image.apartment_id)
         assert main_image_queryset.exists()
@@ -118,7 +120,9 @@ class TestImagesServices:
         assert main_image.is_main is True
         assert main_image == db_image_main
 
-    def test_update_apartment_image_obj_set_(self, db_image_main, db_image):
+    def test_update_apartment_image_obj_set_new_main_image(
+        self, db_image_main: ApartmentImage, db_image: ApartmentImage
+    ):
         update_apartment_image_obj(
             image_obj=db_image, apartment_id=db_image.apartment_id
         )
