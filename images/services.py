@@ -32,7 +32,7 @@ def delete_apartment_image_obj(image_id: uuid.UUID, apartment_id: int) -> None:
     image_obj.delete()
 
 
-def _get_main_image(apartment_id: int) -> QuerySet[ApartmentImage]:
+def _get_main_image(apartment_id: int) -> QuerySet:
     return ApartmentImage.objects.filter(apartment_id=apartment_id, is_main=True)
 
 

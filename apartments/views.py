@@ -30,7 +30,7 @@ class ApartmentView(generics.ListAPIView):
         "is_available": ["exact"],
     }
 
-    def get_queryset(self) -> QuerySet[Apartment]:
+    def get_queryset(self) -> QuerySet:
         return list_apartments()
 
 
@@ -53,7 +53,7 @@ class ApartmentAdvertisementView(generics.ListCreateAPIView):
             else ApartmentInputSerializer
         )
 
-    def get_queryset(self) -> QuerySet[Apartment]:
+    def get_queryset(self) -> QuerySet:
         return list_owner_apartments(owner_id=self.request.user.id)
 
     def create(self, request: Request, *args, **kwargs) -> Response:

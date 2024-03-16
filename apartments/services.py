@@ -4,7 +4,7 @@ from apartments.models import Apartment, Address
 from images.models import ApartmentImage
 
 
-def list_apartments() -> QuerySet[Apartment]:
+def list_apartments() -> QuerySet:
     return Apartment.objects.all()
 
 
@@ -20,7 +20,7 @@ def get_apartment_advertisement_details(apartment_id: int, owner_id: int) -> Apa
     return get_object_or_404(apartment_obj)
 
 
-def list_owner_apartments(owner_id: int) -> QuerySet[Apartment]:
+def list_owner_apartments(owner_id: int) -> QuerySet:
     return Apartment.objects.filter(owner_id=owner_id).select_related("address")
 
 
