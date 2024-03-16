@@ -18,13 +18,13 @@ User = get_user_model()
 
 
 @pytest.fixture
-def user():
+def user() -> User:
     user = User.objects.create(username="testuser123", password="testpassword123")
     return user
 
 
 @pytest.fixture
-def address():
+def address() -> Address:
     address_obj = Address.objects.create(
         street="teststreet",
         city="testcity",
@@ -36,7 +36,7 @@ def address():
 
 
 @pytest.fixture
-def apartment(address, user):
+def apartment(address, user) -> Apartment:
     apartment_obj = Apartment.objects.create(
         surface="100",
         is_furnished=True,
@@ -53,14 +53,16 @@ def apartment(address, user):
 
 @pytest.mark.django_db
 class TestApartmentServices:
-    def test_list_apartments_return_apartments_if_apartment_exists(self, apartment):
+    def test_list_apartments_return_apartments_if_apartment_exists(
+        self, apartment: Apartment
+    ):
         apartments = list_apartments()
 
         assert len(apartments) == 1
         assert apartment in apartments
 
     def test_get_apartment_details_return_apartment_obj_if_apartment_exists(
-        self, apartment
+        self, apartment: Apartment
     ):
         apartment_details = get_apartment_details(apartment_id=apartment.id)
 
@@ -71,7 +73,7 @@ class TestApartmentServices:
             get_apartment_details(apartment_id=9999)
 
     def test_list_owner_apartment_advertisements_return_user_apartments_if_apartments_exists(
-        self, apartment
+        self, apartment: Apartment
     ):
         apartments_adv = list_owner_apartments(owner_id=apartment.owner_id)
 
@@ -79,7 +81,7 @@ class TestApartmentServices:
         assert apartment in apartments_adv
 
     def test_create_apartment_with_address_create_apartment_obj_if_data_is_valid(
-        self, user
+        self, user: User
     ):
         data = {
             "surface": "100.00",
@@ -102,7 +104,9 @@ class TestApartmentServices:
         owner_apartments = Apartment.objects.filter(owner_id=user.id)
         assert created_apartment in owner_apartments
 
-    def test__update_apartment_data_update_apartment_if_data_is_valid(self, apartment):
+    def test__update_apartment_data_update_apartment_if_data_is_valid(
+        self, apartment: Apartment
+    ):
         data = {
             "surface": Decimal("150.00"),
             "is_furnished": False,
@@ -123,7 +127,7 @@ class TestApartmentServices:
         assert updated_apartment == data
 
     def test_update_apartment_with_address_update_apartment_if_data_is_valid(
-        self, apartment
+        self, apartment: Apartment
     ):
         data = {
             "surface": Decimal("150.00"),
