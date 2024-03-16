@@ -28,9 +28,3 @@ class Apartment(models.Model):
     is_furnished = models.BooleanField(default=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.OneToOneField(Address, on_delete=models.CASCADE)
-
-
-class Visit(models.Model):
-    apartment = models.ForeignKey(Apartment, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_time = models.DateTimeField()
