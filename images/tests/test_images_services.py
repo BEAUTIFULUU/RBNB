@@ -1,5 +1,6 @@
 import os
 import pytest
+from _pytest.fixtures import SubRequest
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from apartments.models import Address, Apartment
@@ -72,7 +73,7 @@ def db_image_main(apartment: Apartment):
 
 
 @pytest.fixture
-def in_memory_image(request):
+def in_memory_image(request: SubRequest):
     filename = request.param
     test_image_path = os.path.join(os.path.dirname(__file__), "test_data", filename)
     with open(test_image_path, "rb") as f:
