@@ -2,13 +2,14 @@ import mimetypes
 import os
 
 import pytest
+from _pytest.fixtures import SubRequest
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from images.services import validate_image_format
 
 
 @pytest.fixture
-def in_memory_image(request):
+def in_memory_image(request: SubRequest):
     filename = request.param
     test_image_path = os.path.join(os.path.dirname(__file__), "test_data", filename)
     content_type, _ = mimetypes.guess_type(test_image_path)
