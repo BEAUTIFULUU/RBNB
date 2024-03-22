@@ -18,3 +18,7 @@ def create_apartment_visit(
 
 def get_owner_apartments_visits(owner_id: int) -> QuerySet:
     return Visit.objects.filter(apartment__owner=owner_id)
+
+
+def get_tenant_apartments_visits(tenant_id: int) -> QuerySet:
+    return Visit.objects.filter(user_id=tenant_id)
