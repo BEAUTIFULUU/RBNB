@@ -9,7 +9,7 @@ from apartments.views import (
     ApartmentAdvertisementDetailView,
 )
 from images.views import AdvertisementImageView, AdvertisementImageDetailView
-from visits.views import VisitView
+from visits.views import CreateVisitView, VisitView
 from livehere import settings
 
 urlpatterns = [
@@ -24,13 +24,18 @@ urlpatterns = [
     ),
     path(
         "apartments/<uuid:apartment_id>/visit/",
-        VisitView.as_view(),
+        CreateVisitView.as_view(),
         name="post_apartment_visit",
     ),
     path(
         "me/advertisements/",
         ApartmentAdvertisementView.as_view(),
         name="get_owner_advertisements",
+    ),
+    path(
+        "me/advertisements/visits/",
+        VisitView.as_view(),
+        name="get_owner_advertisements_visits",
     ),
     path(
         "me/advertisements/<uuid:advertisement_id>/",
