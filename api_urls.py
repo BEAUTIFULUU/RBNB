@@ -9,7 +9,7 @@ from apartments.views import (
     ApartmentAdvertisementDetailView,
 )
 from images.views import AdvertisementImageView, AdvertisementImageDetailView
-from visits.views import CreateVisitView, VisitView
+from visits.views import CreateVisitView, OwnerVisitView, TenantVisitView
 from livehere import settings
 
 urlpatterns = [
@@ -17,6 +17,11 @@ urlpatterns = [
     path("auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("apartments/", ApartmentView.as_view(), name="get_apartments"),
+    path(
+        "me/visits/",
+        TenantVisitView.as_view(),
+        name="get_tenant_apartment_visits",
+    ),
     path(
         "apartments/<uuid:apartment_id>/",
         ApartmentDetailView.as_view(),
@@ -34,7 +39,7 @@ urlpatterns = [
     ),
     path(
         "me/advertisements/visits/",
-        VisitView.as_view(),
+        OwnerVisitView.as_view(),
         name="get_owner_advertisements_visits",
     ),
     path(
