@@ -1,3 +1,5 @@
+import uuid
+
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
@@ -13,6 +15,7 @@ class Address(models.Model):
 
 
 class Apartment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     surface = models.DecimalField(
         max_digits=5, decimal_places=2, validators=[MinValueValidator(3)]
     )

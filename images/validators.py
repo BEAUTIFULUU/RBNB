@@ -1,6 +1,6 @@
 import magic
-from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from rest_framework.exceptions import ValidationError
 
 from livehere import settings
 

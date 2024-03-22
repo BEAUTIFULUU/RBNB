@@ -79,6 +79,3 @@ class ApartmentDetailOutputSerializer(serializers.ModelSerializer):
             "owner",
             "address",
         ]
-
-
-# class ApartmentAdvertisementD

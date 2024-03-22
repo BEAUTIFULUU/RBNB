@@ -5,7 +5,7 @@ from images.models import ApartmentImage
 
 
 def list_apartments() -> QuerySet:
-    return Apartment.objects.all()
+    return Apartment.objects.filter(is_available=True)
 
 
 def get_apartment_details(apartment_id: int) -> Apartment:
